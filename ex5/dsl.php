@@ -1,28 +1,40 @@
 <?php
 
-$commands = array(
-  array( "command" => "P", 
+$doSelectPen = array(
+  "command" => "P", 
   "argRequired" => true, 
-  "functionToRun"=>"doSelectPen",
-),
-array( "command" => "U", 
-"argRequired" => false, 
-"functionToRun"=>"doPenUp",),
-array( "command" => "D", 
-"argRequired" => false, 
-"functionToRun"=>"doPenDown",),array( "command" => "N", 
-"argRequired" => true, 
-"functionToRun"=>"doPenDir",),array( "command" => "S", 
-"argRequired" => true, 
-"functionToRun"=>"doPenDir",),array( "command" => "E", 
-"argRequired" => true, 
-"functionToRun"=>"doPenDir",),array( "command" => "W", 
-"argRequired" => true, 
-"functionToRun"=>"doPenDir",));
+  "functionToRun"=>"doSelectPen"
+);
+$doPenUp = array(
+  "command" => "U", 
+  "argRequired" => false, 
+  "functionToRun"=>"doPenUp");
 
+$doPenDown = array(
+  "command" => "D", 
+  "argrequired" => false, 
+  "functiontorun"=>"dopendown"
+);
+$doPenDirN = array (
+  "command" => "n", 
+  "argrequired" => true, 
+  "functiontorun"=>"dopendir",
+);
+$doPenDirS = array(
+  "command" => "s", 
+  "argrequired" => true,
+  "functiontorun"=>"dopendir"
+);
+$doPenDirE = array(
+  "command" => "e", 
+  "argrequired" => true,
+  "functiontorun"=>"dopendir"
+);
+
+$commands = [$doSlectPen, $doPenUp, $doPenDown, $doPenDirN, $doPenDirS, $doPenDirE];
 // param validation
 if(!isset($argv[1])){
-  die("*** Cmd required ***");
+  die("*** cmd required ***");
 }
 if(!isset($argv[2])){
   $argv[2] = "";
@@ -34,7 +46,7 @@ $param = $argv[2];
 echo "cmd: " . $cmd . PHP_EOL;
 echo "parameter: " . $param . PHP_EOL;
 
-$validCmd = false;
+$validcmd = false;
 foreach ($commands as $commandOpt) {
 
   //cmd validation
