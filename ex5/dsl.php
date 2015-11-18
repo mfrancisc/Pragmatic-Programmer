@@ -16,17 +16,17 @@ $doPenDown = array(
   "functiontorun"=>"dopendown"
 );
 $doPenDirN = array (
-  "command" => "n", 
+  "command" => "N", 
   "argrequired" => true, 
   "functiontorun"=>"dopendir",
 );
 $doPenDirS = array(
-  "command" => "s", 
+  "command" => "S", 
   "argrequired" => true,
   "functiontorun"=>"dopendir"
 );
 $doPenDirE = array(
-  "command" => "e", 
+  "command" => "E", 
   "argrequired" => true,
   "functiontorun"=>"dopendir"
 );
