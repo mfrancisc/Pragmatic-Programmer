@@ -5,6 +5,7 @@ int yylex();
 #include <string.h>
  
 #define YYSTYPE char *
+
 %}
 
 %start time
@@ -15,20 +16,20 @@ int yylex();
 
 %%
 
-time        :   hour ampm           {printf ("Valid time format 1 : %d%s\n ", $1, $2);}
-            |   hour colon minute   {printf ("Valid time format 2 : %d:%d\n",$1, $3);}
-            |   hour colon minute ampm      {printf ("Valid time format 3 : %d:%d%s\n",$1, $3, $4);}
+time        :  hour ampm           {printf ("Valid time format 1 : %d%s\n ", $1, $2);}
+            |  hour colon minute   {printf ("Valid time format 2 : %d:%d\n",$1, $3);}
+            |  hour colon minute ampm {printf ("Valid time format 3 : %d:%d%s\n",$1, $3, $4); }
             ;
 
 ampm        :   am               {$$ = "am";}
             |   pm               {$$ = "pm";}
             ;
 
-hour        :   digit              {$$ = $1;}
-            |   digit digit         { $$= $1;}
+hour        :   digit digit             {$$ = $1;}
+            |   digit          { $$ = $1 ;}
             ;
 
-minute      :   digit digit         {$$ =  $1;} 
+minute      :   digit digit         {$$ =  $1 ;} 
             ;
 
 %%
@@ -38,7 +39,9 @@ int yywrap()
 } 
 
 int main (void) {
-
+while( yylex() )
+		;
+	return 0;
   return yyparse();
 }
 

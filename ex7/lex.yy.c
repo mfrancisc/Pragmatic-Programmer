@@ -727,17 +727,17 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 YY_RULE_SETUP
 #line 8 "time.l"
-{yylval=atoi(yytext);  return digit;}
+{yylval=atoi(yytext); return digit;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
 #line 9 "time.l"
-{ return am;}
+{yylval=yytext; return am;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
 #line 10 "time.l"
-{ return pm;}
+{yylval=yytext; return pm;}
 	YY_BREAK
 case 4:
 /* rule 4 can match eol */
@@ -748,12 +748,12 @@ YY_RULE_SETUP
 case 5:
 YY_RULE_SETUP
 #line 12 "time.l"
-{ return colon;}
+{yylval =yytext; return colon;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
 #line 13 "time.l"
-{ printf ("unexpected character");}
+{ printf ("Invalid character\n");}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP

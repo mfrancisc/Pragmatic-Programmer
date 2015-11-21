@@ -5,12 +5,12 @@
 
 %%
 
-[0-9]+                {yylval=atoi(yytext);  return digit;}
-"am"                   { return am;}
-"pm"                   { return pm;}
+[0-9]+                {yylval=atoi(yytext); return digit;}
+"am"                   {yylval=yytext; return am;}
+"pm"                   {yylval=yytext; return pm;}
 [ \t\n]               ;
-[:]                    { return colon;}
-.                     { printf ("unexpected character");}
+[:]                    {yylval =yytext; return colon;}
+.                     { printf ("Invalid character\n");}
 
 %%
 

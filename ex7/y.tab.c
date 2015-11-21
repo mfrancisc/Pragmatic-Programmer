@@ -92,6 +92,7 @@ int yylex();
 #define YYSTYPE char *
 
 
+
 /* Enabling traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -123,7 +124,7 @@ typedef int YYSTYPE;
 
 
 /* Line 216 of yacc.c.  */
-#line 127 "y.tab.c"
+#line 128 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -393,7 +394,7 @@ static const yytype_uint8 yytranslate[] =
    YYRHS.  */
 static const yytype_uint8 yyprhs[] =
 {
-       0,     0,     3,     6,    10,    15,    17,    19,    21,    24
+       0,     0,     3,     6,    10,    15,    17,    19,    22,    24
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
@@ -401,13 +402,13 @@ static const yytype_int8 yyrhs[] =
 {
        8,     0,    -1,    10,     9,    -1,    10,     6,    11,    -1,
       10,     6,    11,     9,    -1,     4,    -1,     5,    -1,     3,
-      -1,     3,     3,    -1,     3,     3,    -1
+       3,    -1,     3,    -1,     3,     3,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    18,    18,    19,    20,    23,    24,    27,    28,    31
+       0,    19,    19,    20,    21,    24,    25,    28,    29,    32
 };
 #endif
 
@@ -439,7 +440,7 @@ static const yytype_uint8 yyr1[] =
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     2,     3,     4,     1,     1,     1,     2,     2
+       0,     2,     2,     3,     4,     1,     1,     2,     1,     2
 };
 
 /* YYDEFACT[STATE-NAME] -- Default rule to reduce with in state
@@ -447,7 +448,7 @@ static const yytype_uint8 yyr2[] =
    means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       0,     7,     0,     0,     8,     1,     5,     6,     0,     2,
+       0,     8,     0,     0,     7,     1,     5,     6,     0,     2,
        0,     3,     9,     4
 };
 
@@ -1309,48 +1310,48 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 18 "time.y"
+#line 19 "time.y"
     {printf ("Valid time format 1 : %d%s\n ", (yyvsp[(1) - (2)]), (yyvsp[(2) - (2)]));}
     break;
 
   case 3:
-#line 19 "time.y"
+#line 20 "time.y"
     {printf ("Valid time format 2 : %d:%d\n",(yyvsp[(1) - (3)]), (yyvsp[(3) - (3)]));}
     break;
 
   case 4:
-#line 20 "time.y"
-    {printf ("Valid time format 3 : %d:%d%s\n",(yyvsp[(1) - (4)]), (yyvsp[(3) - (4)]), (yyvsp[(4) - (4)]));}
+#line 21 "time.y"
+    {printf ("Valid time format 3 : %d:%d%s\n",(yyvsp[(1) - (4)]), (yyvsp[(3) - (4)]), (yyvsp[(4) - (4)])); }
     break;
 
   case 5:
-#line 23 "time.y"
+#line 24 "time.y"
     {(yyval) = "am";}
     break;
 
   case 6:
-#line 24 "time.y"
+#line 25 "time.y"
     {(yyval) = "pm";}
     break;
 
   case 7:
-#line 27 "time.y"
-    {(yyval) = (yyvsp[(1) - (1)]);}
+#line 28 "time.y"
+    {(yyval) = (yyvsp[(1) - (2)]);}
     break;
 
   case 8:
-#line 28 "time.y"
-    { (yyval)= (yyvsp[(1) - (2)]);}
+#line 29 "time.y"
+    { (yyval) = (yyvsp[(1) - (1)]) ;}
     break;
 
   case 9:
-#line 31 "time.y"
-    {(yyval) =  (yyvsp[(1) - (2)]);}
+#line 32 "time.y"
+    {(yyval) =  (yyvsp[(1) - (2)]) ;}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1354 "y.tab.c"
+#line 1355 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1564,7 +1565,7 @@ yyreturn:
 }
 
 
-#line 34 "time.y"
+#line 35 "time.y"
 
 int yywrap()
 {
@@ -1572,7 +1573,9 @@ int yywrap()
 } 
 
 int main (void) {
-
+while( yylex() )
+		;
+	return 0;
   return yyparse();
 }
 
