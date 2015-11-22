@@ -3,34 +3,58 @@ void yyerror (char *s);
 int yylex();
 #include <stdio.h>
 #include <string.h>
- 
-#define YYSTYPE char *
+#include <stdlib.h>
 
+char ampm_str[15] = "";
+
+typedef int bool;
+bool validFormat = 1;
 %}
 
-%start time
+%start input
 %token digit
 %token am
 %token pm
 %token colon
+%token sep
+%token exit_command
 
 %%
-
-time        :  hour ampm           {printf ("Valid time format 1 : %d%s\n ", $1, $2);}
-            |  hour colon minute   {printf ("Valid time format 2 : %d:%d\n",$1, $3);}
-            |  hour colon minute ampm {printf ("Valid time format 3 : %d:%d%s\n",$1, $3, $4); }
+input       : /* empty */
+            | input line 
             ;
 
-ampm        :   am               {$$ = "am";}
-            |   pm               {$$ = "pm";}
+line        : '\n'
+            | list '\n' 
             ;
 
-hour        :   digit digit             {$$ = $1;}
-            |   digit          { $$ = $1 ;}
+list        : time
+            | time sep list 
+            | exit_command  {exit(EXIT_SUCCESS);}
             ;
 
-minute      :   digit digit         {$$ =  $1 ;} 
+
+time        :  hour ampm                {if ($1 > 12 || $1 <= 0)  {printf ("Hour out of range\n");validFormat = 0;} else if(validFormat) {printf("Valid time format %d%s\n", $1, ampm_str); } validFormat = 1;}
+            |  hour colon minute        {if ($1 > 24 || $1 <= 0)  {printf ("Hour out of range\n");validFormat = 0;} else if(validFormat) {printf("Valid time format   %d:%d\n", $1, $3); } validFormat = 1;}
+            |  hour colon minute ampm   {if ($1 > 12 || $1 <= 0)  {printf ("Hour out of range\n");validFormat = 0;} else if(validFormat) {printf ("Valid time format   %d:%d%s\n", $1, $3, ampm_str); } validFormat = 1;}
             ;
+
+
+hour        :   two_digits        { $$ = $1; }
+            |   digit             { $$ = $1; }
+            ;
+
+minute      :   two_digits          { $$ = $1; if ($$ > 59) {printf ( "minute out of range\n");validFormat = 0;}}
+            |   digit               { $$ = $1; if ($$ > 59) {printf ( "minute out of range\n");validFormat = 0;}}
+            ;
+
+two_digits  :  digit digit          {$$ = 0; $$ = $1 * 10 + $2; }
+            ;
+
+ampm        :   am               {strcpy(ampm_str, "am");}
+            |   pm               {strcpy(ampm_str, "pm");}
+            ;
+
 
 %%
 int yywrap()
@@ -39,11 +63,14 @@ int yywrap()
 } 
 
 int main (void) {
-while( yylex() )
-		;
-	return 0;
+printf ("Insert time, and press enter\n");
+printf ("Type , after each time\n");
+printf ("Valid formats : 2am, 12:00, 13:30pm\n");
+printf ("exit to quit\n");
+
   return yyparse();
 }
 
-void yyerror (char *s) {fprintf (stderr, "%s\n", s);}
+
+void yyerror (char *s) {fprintf (stderr, "Invalid character: %s\n", s); validFormat = 0;}
 

@@ -69,7 +69,9 @@
      digit = 258,
      am = 259,
      pm = 260,
-     colon = 261
+     colon = 261,
+     sep = 262,
+     exit_command = 263
    };
 #endif
 /* Tokens.  */
@@ -77,6 +79,8 @@
 #define am 259
 #define pm 260
 #define colon 261
+#define sep 262
+#define exit_command 263
 
 
 
@@ -88,9 +92,12 @@ void yyerror (char *s);
 int yylex();
 #include <stdio.h>
 #include <string.h>
- 
-#define YYSTYPE char *
+#include <stdlib.h>
 
+char ampm_str[15] = "";
+
+typedef int bool;
+bool validFormat = 1;
 
 
 /* Enabling traces.  */
@@ -124,7 +131,7 @@ typedef int YYSTYPE;
 
 
 /* Line 216 of yacc.c.  */
-#line 128 "y.tab.c"
+#line 135 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -337,22 +344,22 @@ union yyalloc
 #endif
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  5
+#define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   11
+#define YYLAST   17
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  7
+#define YYNTOKENS  10
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  5
+#define YYNNTS  9
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  9
+#define YYNRULES  18
 /* YYNRULES -- Number of states.  */
-#define YYNSTATES  14
+#define YYNSTATES  23
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   261
+#define YYMAXUTOK   263
 
 #define YYTRANSLATE(YYX)						\
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -361,7 +368,7 @@ union yyalloc
 static const yytype_uint8 yytranslate[] =
 {
        0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       9,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -386,7 +393,7 @@ static const yytype_uint8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6
+       5,     6,     7,     8
 };
 
 #if YYDEBUG
@@ -394,21 +401,25 @@ static const yytype_uint8 yytranslate[] =
    YYRHS.  */
 static const yytype_uint8 yyprhs[] =
 {
-       0,     0,     3,     6,    10,    15,    17,    19,    22,    24
+       0,     0,     3,     4,     7,     9,    12,    14,    18,    20,
+      23,    27,    32,    34,    36,    38,    40,    43,    45
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
 static const yytype_int8 yyrhs[] =
 {
-       8,     0,    -1,    10,     9,    -1,    10,     6,    11,    -1,
-      10,     6,    11,     9,    -1,     4,    -1,     5,    -1,     3,
-       3,    -1,     3,    -1,     3,     3,    -1
+      11,     0,    -1,    -1,    11,    12,    -1,     9,    -1,    13,
+       9,    -1,    14,    -1,    14,     7,    13,    -1,     8,    -1,
+      15,    18,    -1,    15,     6,    16,    -1,    15,     6,    16,
+      18,    -1,    17,    -1,     3,    -1,    17,    -1,     3,    -1,
+       3,     3,    -1,     4,    -1,     5,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    19,    19,    20,    21,    24,    25,    28,    29,    32
+       0,    23,    23,    24,    27,    28,    31,    32,    33,    37,
+      38,    39,    43,    44,    47,    48,    51,    54,    55
 };
 #endif
 
@@ -417,8 +428,9 @@ static const yytype_uint8 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "digit", "am", "pm", "colon", "$accept",
-  "time", "ampm", "hour", "minute", 0
+  "$end", "error", "$undefined", "digit", "am", "pm", "colon", "sep",
+  "exit_command", "'\\n'", "$accept", "input", "line", "list", "time",
+  "hour", "minute", "two_digits", "ampm", 0
 };
 #endif
 
@@ -427,20 +439,22 @@ static const char *const yytname[] =
    token YYLEX-NUM.  */
 static const yytype_uint16 yytoknum[] =
 {
-       0,   256,   257,   258,   259,   260,   261
+       0,   256,   257,   258,   259,   260,   261,   262,   263,    10
 };
 # endif
 
 /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,     7,     8,     8,     8,     9,     9,    10,    10,    11
+       0,    10,    11,    11,    12,    12,    13,    13,    13,    14,
+      14,    14,    15,    15,    16,    16,    17,    18,    18
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     2,     3,     4,     1,     1,     2,     1,     2
+       0,     2,     0,     2,     1,     2,     1,     3,     1,     2,
+       3,     4,     1,     1,     1,     1,     2,     1,     1
 };
 
 /* YYDEFACT[STATE-NAME] -- Default rule to reduce with in state
@@ -448,29 +462,31 @@ static const yytype_uint8 yyr2[] =
    means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       0,     8,     0,     0,     7,     1,     5,     6,     0,     2,
-       0,     3,     9,     4
+       2,     0,     1,    13,     8,     4,     3,     0,     6,     0,
+      12,    16,     5,     0,    17,    18,     0,     9,     7,    15,
+      10,    14,    11
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     2,     9,     3,    11
+      -1,     1,     6,     7,     8,     9,    20,    10,    17
 };
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
-#define YYPACT_NINF -5
+#define YYPACT_NINF -7
 static const yytype_int8 yypact[] =
 {
-       2,     3,     7,    -4,    -5,    -5,    -5,    -5,     5,    -5,
-       6,    -1,    -5,    -5
+      -7,     0,    -7,    -1,    -7,    -7,    -7,    -5,     8,     6,
+      -7,    -7,    -7,    -2,    -7,    -7,     2,    -7,    -7,    -1,
+       9,    -7,    -7
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -5,    -5,     0,    -5,    -5
+      -7,    -7,    -7,    -6,    -7,    -7,    -7,     1,    -4
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -480,22 +496,23 @@ static const yytype_int8 yypgoto[] =
 #define YYTABLE_NINF -1
 static const yytype_uint8 yytable[] =
 {
-       6,     7,     8,     6,     7,     1,     4,     5,    10,    12,
-       0,    13
+       2,     3,    11,     3,    12,    19,     4,    18,     4,     5,
+      14,    15,    16,    14,    15,    13,    22,    21
 };
 
-static const yytype_int8 yycheck[] =
+static const yytype_uint8 yycheck[] =
 {
-       4,     5,     6,     4,     5,     3,     3,     0,     3,     3,
-      -1,    11
+       0,     3,     3,     3,     9,     3,     8,    13,     8,     9,
+       4,     5,     6,     4,     5,     7,    20,    16
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
    symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,     3,     8,    10,     3,     0,     4,     5,     6,     9,
-       3,    11,     3,     9
+       0,    11,     0,     3,     8,     9,    12,    13,    14,    15,
+      17,     3,     9,     7,     4,     5,     6,    18,    13,     3,
+      16,    17,    18
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -1309,49 +1326,64 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 2:
-#line 19 "time.y"
-    {printf ("Valid time format 1 : %d%s\n ", (yyvsp[(1) - (2)]), (yyvsp[(2) - (2)]));}
-    break;
-
-  case 3:
-#line 20 "time.y"
-    {printf ("Valid time format 2 : %d:%d\n",(yyvsp[(1) - (3)]), (yyvsp[(3) - (3)]));}
-    break;
-
-  case 4:
-#line 21 "time.y"
-    {printf ("Valid time format 3 : %d:%d%s\n",(yyvsp[(1) - (4)]), (yyvsp[(3) - (4)]), (yyvsp[(4) - (4)])); }
-    break;
-
-  case 5:
-#line 24 "time.y"
-    {(yyval) = "am";}
-    break;
-
-  case 6:
-#line 25 "time.y"
-    {(yyval) = "pm";}
-    break;
-
-  case 7:
-#line 28 "time.y"
-    {(yyval) = (yyvsp[(1) - (2)]);}
-    break;
-
-  case 8:
-#line 29 "time.y"
-    { (yyval) = (yyvsp[(1) - (1)]) ;}
+        case 8:
+#line 33 "time.y"
+    {exit(EXIT_SUCCESS);}
     break;
 
   case 9:
-#line 32 "time.y"
-    {(yyval) =  (yyvsp[(1) - (2)]) ;}
+#line 37 "time.y"
+    {if ((yyvsp[(1) - (2)]) > 12 || (yyvsp[(1) - (2)]) <= 0)  {printf ("Hour out of range\n");validFormat = 0;} else if(validFormat) {printf("Valid time format %d%s\n", (yyvsp[(1) - (2)]), ampm_str); } validFormat = 1;}
+    break;
+
+  case 10:
+#line 38 "time.y"
+    {if ((yyvsp[(1) - (3)]) > 24 || (yyvsp[(1) - (3)]) <= 0)  {printf ("Hour out of range\n");validFormat = 0;} else if(validFormat) {printf("Valid time format   %d:%d\n", (yyvsp[(1) - (3)]), (yyvsp[(3) - (3)])); } validFormat = 1;}
+    break;
+
+  case 11:
+#line 39 "time.y"
+    {if ((yyvsp[(1) - (4)]) > 12 || (yyvsp[(1) - (4)]) <= 0)  {printf ("Hour out of range\n");validFormat = 0;} else if(validFormat) {printf ("Valid time format   %d:%d%s\n", (yyvsp[(1) - (4)]), (yyvsp[(3) - (4)]), ampm_str); } validFormat = 1;}
+    break;
+
+  case 12:
+#line 43 "time.y"
+    { (yyval) = (yyvsp[(1) - (1)]); }
+    break;
+
+  case 13:
+#line 44 "time.y"
+    { (yyval) = (yyvsp[(1) - (1)]); }
+    break;
+
+  case 14:
+#line 47 "time.y"
+    { (yyval) = (yyvsp[(1) - (1)]); if ((yyval) > 59) {printf ( "minute out of range\n");validFormat = 0;}}
+    break;
+
+  case 15:
+#line 48 "time.y"
+    { (yyval) = (yyvsp[(1) - (1)]); if ((yyval) > 59) {printf ( "minute out of range\n");validFormat = 0;}}
+    break;
+
+  case 16:
+#line 51 "time.y"
+    {(yyval) = 0; (yyval) = (yyvsp[(1) - (2)]) * 10 + (yyvsp[(2) - (2)]); }
+    break;
+
+  case 17:
+#line 54 "time.y"
+    {strcpy(ampm_str, "am");}
+    break;
+
+  case 18:
+#line 55 "time.y"
+    {strcpy(ampm_str, "pm");}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1355 "y.tab.c"
+#line 1387 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1565,7 +1597,7 @@ yyreturn:
 }
 
 
-#line 35 "time.y"
+#line 59 "time.y"
 
 int yywrap()
 {
@@ -1573,12 +1605,15 @@ int yywrap()
 } 
 
 int main (void) {
-while( yylex() )
-		;
-	return 0;
+printf ("Insert time, and press enter\n");
+printf ("Type , after each time\n");
+printf ("Valid formats : 2am, 12:00, 13:30pm\n");
+printf ("exit to quit\n");
+
   return yyparse();
 }
 
-void yyerror (char *s) {fprintf (stderr, "%s\n", s);}
+
+void yyerror (char *s) {fprintf (stderr, "Invalid character: %s\n", s); validFormat = 0;}
 
 

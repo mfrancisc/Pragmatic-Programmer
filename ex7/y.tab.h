@@ -42,7 +42,9 @@
      digit = 258,
      am = 259,
      pm = 260,
-     colon = 261
+     colon = 261,
+     sep = 262,
+     exit_command = 263
    };
 #endif
 /* Tokens.  */
@@ -50,6 +52,8 @@
 #define am 259
 #define pm 260
 #define colon 261
+#define sep 262
+#define exit_command 263
 
 
 
