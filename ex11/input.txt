@@ -1,4 +1,4 @@
-name
+pippo
 state_a
 state_b
 : :

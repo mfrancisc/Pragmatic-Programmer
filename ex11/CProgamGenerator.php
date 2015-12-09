@@ -6,17 +6,30 @@ fclose($myfile);
 
 $arrayLines = explode(PHP_EOL, $content);
 
-//creating .h file
-$extString = "extern ";
-$namesDecl = "const char* NAME_names[]";
+//reading name form input file
+$name = $arrayLines[0];
+$nameUpper = strtoupper($name);
 
+//removing the name line
+unset($arrayLines[0]);
+
+
+$extString = "extern ";
+$namesDecl = "const char* " . $nameUpper. "_names[]";
+
+//code for header file
 $headerContent =  $extString . $namesDecl . ";" . PHP_EOL;
 $headerContent .= "typedef enum {" . PHP_EOL;
 
+//code fot C program
 $cPgmContent = $namesDecl . " = {" . PHP_EOL;
 
+if($name === ""){
+  die("Invalid name");
+}
+
 foreach($arrayLines as $line) {
-  if($line === "name" || $line === ""){
+  if($line === ""){
     continue; 
   }
 
@@ -28,11 +41,17 @@ foreach($arrayLines as $line) {
     $cPgmContent .=  $line . PHP_EOL;
   }
 }
-$headerContent .= "} NAME;". PHP_EOL;
+
+$headerContent .= "} ".$nameUpper.";". PHP_EOL;
 $cPgmContent .= "};". PHP_EOL;
 
-file_put_contents("name.h", $headerContent ,  LOCK_EX);
-file_put_contents("name.c", $cPgmContent ,  LOCK_EX);
+//header 
+file_put_contents($name . ".h", $headerContent ,  LOCK_EX);
+echo "Genereated " . $name .".h". PHP_EOL;
+
+//c pgm
+file_put_contents($name . ".c", $cPgmContent ,  LOCK_EX);
+echo "Genereated " . $name .".c" . PHP_EOL;
 
 
 
