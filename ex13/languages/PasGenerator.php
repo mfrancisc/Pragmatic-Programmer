@@ -7,7 +7,7 @@ namespace CodeGenerator\Languages;
 
 include_once "BaseGenerator.php";
 
-class Generator extends BaseGenerator{
+class PasGenerator extends BaseGenerator{
 
 
   public function output($outputFileName)

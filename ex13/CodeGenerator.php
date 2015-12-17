@@ -5,7 +5,6 @@
  *
  */
 include_once "InputParameters.php";
-include_once "Validator.php";
 include_once "GeneratorFactory.php";
 
 // reading input parameters
@@ -13,10 +12,6 @@ $inputParam = new CodeGenerator\InputParameters($argv);
 $inputFileName = $inputParam->getInputFileName();
 $lang = $inputParam->getLanguage();
 $outputFileName = $inputParam->getOuputFileName();
-
-//validation
-$validator = new CodeGenerator\Validator();
-$validator->validateLanguage($lang);
 
 //generator object
 $generatorFactory = new CodeGenerator\GeneratorFactory();

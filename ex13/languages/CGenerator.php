@@ -7,7 +7,7 @@ namespace CodeGenerator\Languages;
 
 include_once "BaseGenerator.php";
 
-class Generator extends BaseGenerator{
+class CGenerator extends BaseGenerator{
 
   public function output($outputFileName)
   {
@@ -22,13 +22,13 @@ class Generator extends BaseGenerator{
    */
   public function comment()
   {
-    $this->line = str_replace("#", "", $this->line);
+    $this->removeCommentTag();
     $this->outputCode =  $this->outputCode . "/* " . $this->line . " */" . PHP_EOL;
   }
 
   public function messageDef()
   {
-    $this->line = str_replace("M", "", $this->line);
+    $this->removeMessTag();
     $this->outputCode = $this->outputCode . "typedef struct {" . PHP_EOL;
     $this->endMsg = "} " . $this->line . "Msg;";
   }
