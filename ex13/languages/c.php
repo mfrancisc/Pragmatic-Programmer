@@ -3,28 +3,11 @@
  * C conde generator
  *
  */
-namespace CodeGenerator;
+namespace CodeGenerator\Languages;
 
-class Generator {
+include_once "BaseGenerator.php";
 
-  private  $outputCode;
-  private $line, $lineArray, $lineType;
-  private $endMsg;
-
-
-  /**
-   * generates the template 
-   *
-   */
-  public function output($outputFileName)
-  {
-    file_put_contents($outputFileName . ".c", $this->outputCode);
-  }
-
-  public function debug()
-  {
-    print_r($this->outputCode); 
-  }
+class Generator extends BaseGenerator{
 
   /**
    * format line

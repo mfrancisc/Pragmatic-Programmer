@@ -23,8 +23,8 @@ class InputParameters {
   {
     if(isset($this->input[1]))
     {
-      if(file_exists($this->input[1])){
-        return  $this->input[1]; 
+      if(file_exists("data/input/" . $this->input[1])){
+        return  "data/input/" .$this->input[1]; 
       }else{
         die('File not found : ' . $this->input[1]); 
       }

@@ -1,14 +1,14 @@
 <?php
 /**
- * Reads a input file and generates
+ * Reads the input file and generates
  * data structure in multiple languages
  *
  */
-
-// reading input parameters
 include_once "InputParameters.php";
 include_once "Validator.php";
+include_once "GeneratorFactory.php";
 
+// reading input parameters
 $inputParam = new CodeGenerator\InputParameters($argv);
 $inputFileName = $inputParam->getInputFileName();
 $lang = $inputParam->getLanguage();
@@ -18,9 +18,11 @@ $outputFileName = $inputParam->getOuputFileName();
 $validator = new CodeGenerator\Validator();
 $validator->validateLanguage($lang);
 
-include_once $lang .".php";
+//generator object
+$generatorFactory = new CodeGenerator\GeneratorFactory();
+$generator = $generatorFactory->build($lang);
 
-$generator = new CodeGenerator\Generator();
+//generate code
 $handle = fopen($inputFileName, "r");
 if ($handle) {
   while (($line = fgets($handle)) !== false) {
