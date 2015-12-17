@@ -7,6 +7,7 @@
 
 // reading input parameters
 include_once "InputParameters.php";
+include_once "Validator.php";
 
 $inputParam = new CodeGenerator\InputParameters($argv);
 $inputFileName = $inputParam->getInputFileName();
@@ -14,14 +15,8 @@ $lang = $inputParam->getLanguage();
 $outputFileName = $inputParam->getOuputFileName();
 
 //validation
-$langArray = array('php', 'c', 'js', 'java');
-
-if(!in_array($lang , $langArray))
-{
-  die("Language not supported");
-
-}
-
+$validator = new CodeGenerator\Validator();
+$validator->validateLanguage($lang);
 
 include_once $lang .".php";
 
