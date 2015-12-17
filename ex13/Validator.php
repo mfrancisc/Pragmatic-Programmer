@@ -11,7 +11,7 @@ class Validator {
 
   public function validateLanguage($lang)
   {
-    $langArray = array('php', 'c', 'js', 'java');
+    $langArray = array('c', 'pascal');
 
     if(!in_array($lang , $langArray))
     {

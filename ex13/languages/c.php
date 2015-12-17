@@ -1,6 +1,6 @@
 <?php
 /**
- * C conde generator
+ * C code generator
  *
  */
 namespace CodeGenerator\Languages;
@@ -9,24 +9,11 @@ include_once "BaseGenerator.php";
 
 class Generator extends BaseGenerator{
 
-  /**
-   * format line
-   *
-   */
-  public function handleLine($line)
+  public function output($outputFileName)
   {
-    $this->line = str_replace("\n", "", $line);
-    $this->lineArray =explode(" ", $this->line);
-    $this->lineType = $this->lineArray[0];
-  }
+    $outputFileName .= ".c"; 
+    parent::output($outputFileName);
 
-  /**
-   * returns line type
-   *
-   */
-  public function getLineType()
-  {
-    return $this->lineType; 
   }
 
   /**
